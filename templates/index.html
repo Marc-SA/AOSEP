@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style type="text/css">
+        canvas{
+            border: 2px solid black;
+            display: inline-block;
+            margin-right: 20px;
+        }
+        #form{
+            padding: 10px;
+            border: 2px solid black;
+            width: 600px;
+        }
+        input{
+            margin-bottom: 10px;
+        }
+        input[type=text], textarea{
+            width: 97%;
+        }
+        #form-parent{
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+
+<button id="run-day">Run day</button>
+<br><br>
+<div id="form-parent">
+<canvas id="canvas"></canvas>
+<div id="form" style="display:none;">
+    <label for="is_cons">is_cons</label><input type="checkbox" id="is_cons"><br>
+        <label for="producer_table">producer_table</label><input type="text" id="producer_table" value="[0,1,1,0]"><br>
+    <label for="weights">weights</label><input type="text" id="weights" value="[0.8,0.1,0.1]"><br>
+    <label for="treshold">treshold</label><input type="text" id="treshold" value="0.7"><br>
+    <label for="fossileprice">fossileprice</label><input type="text" id="fossileprice" value="0.4"><br>
+    <label for="table_wind">table_wind</label><input type="text" id="table_wind" value="[-1,0.7,0.6,0.55,0.5,0.45,0.4,0.35,0.3,-1]"><br>
+    <label for="nuclear_price">nuclear_price</label><input type="text" id="nuclear_price" value="[0.15, 0.15, 0.15, 0.15, 0.15, 0.15, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.15, 0.15]"><br>
+    <label for="solar_price">solar_price</label><br><textarea type="text" id="solar_price">[[-1, -1, -1, -1, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, -1, -1], [-1, -1, -1, -1, -1, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, -1, -1, -1], [-1, -1, -1, -1, -1, -1, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, -1, -1, -1, -1, -1, -1], [-1, -1, -1, -1, -1, -1, -1, -1, -1, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, 0.4, -1, -1, -1, -1, -1, -1, -1]]</textarea><br>
+    <label for="jobs">jobs</label><br><textarea type="text" id="jobs">[[[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], 15], [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], 15], [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0], 10], [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 24], [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], 15], [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], 15], [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], 15]]</textarea><br>
+    <label for="Sjobs">Sjobs</label><br><textarea type="text" id="Sjobs">[[[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], 15], [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], 0], [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0], 0], [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 0], [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], 0], [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], 0], [[0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0], 0]]</textarea><br><br>
+    <button id="add">Add</button>
+    <button id="delete">Delete</button>
+</div>
+</div>
+<br>
+<div style="display:inline-block; width:600px;height: 400px;"><canvas id="chart2"></canvas><div style="text-align: center;">Jobs per hour in the day</div></div>
+<div style="display:inline-block; width:600px;height: 400px;"><canvas id="chart3"></canvas><div style="text-align: center;">Number of hours sent per energy type</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<script type="text/javascript">
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+let cell_size = 50;
+let grid_size = [0, 0];
+
+let selected = [];
+let previous_data;
+let to_add = [];
+let to_delete = [];
+
+
+var ctx2 = document.getElementById("chart2");
+  var myChart2 = new Chart(ctx2, {
+      type: 'line',
+      data: {
+          labels: [],
+          datasets: [{
+                borderColor: 'rgb(75, 192, 192)',
+                label: 'Groups',
+                data: []
+          }]
+      }
+  });
+
+
+var ctx3 = document.getElementById("chart3");
+  var myChart = new Chart(ctx3, {
+      type: 'line',
+      data: {
+          labels: [],
+          datasets: [
+            {
+                borderColor: 'rgb(75, 192, 192)',
+                label: 'Groups',
+                data: []
+            },
+            {
+                borderColor: 'rgb(100, 2, 192)',
+                label: 'Groups',
+                data: []
+            },
+            {
+                borderColor: 'rgb(0, 12, 192)',
+                label: 'Groups',
+                data: []
+            },
+            {
+                borderColor: 'rgb(75, 192, 12)',
+                label: 'Groups',
+                data: []
+            },
+          ]
+      }
+  });
+
+document.getElementById("add").onclick = function(){
+    if(selected.length == 0) return;
+    if(previous_data.grid[selected[1]*previous_data.width+selected[0]] != null) return;
+    let post_data = {
+        "is_cons": document.getElementById("is_cons").checked ? "True" : "False",
+        "producer_table": document.getElementById("producer_table").value,
+        "weights": document.getElementById("weights").value,
+        "treshold": document.getElementById("treshold").value,
+        "fossileprice": document.getElementById("fossileprice").value,
+        "table_wind": document.getElementById("table_wind").value,
+        "solar_price": document.getElementById("solar_price").value,
+        "nuclear_price": document.getElementById("nuclear_price").value,
+        "jobs": document.getElementById("jobs").value,
+        "Sjobs": document.getElementById("Sjobs").value,
+    }
+
+    fetch("/req?action=add&x="+selected[0]+"&y="+selected[1], {method: "POST", body:JSON.stringify(post_data)}).then(response => response.json()).then(data => {
+        chart_data = data.chart_data;
+        to_add.push(selected[0]+""+selected[1]);
+        update(data.data);
+    });
+};
+
+document.getElementById("delete").onclick = function(){
+    if(selected.length == 0) return;
+    if(previous_data.grid[selected[1]*previous_data.width+selected[0]] == null) return;
+    fetch("/req?action=delete&x="+selected[0]+"&y="+selected[1], {method: "POST"}).then(response => response.json()).then(data => {
+        chart_data = data.chart_data;
+        to_delete.push(selected[0]+""+selected[1]);
+        update(data.data);
+    });
+};
+
+document.getElementById("run-day").onclick = function(){
+    fetch("/req?action=run_day", {method: "POST"}).then(response => response.json()).then(data =>{
+        selected = [];
+        to_add = [];
+        to_delete = [];
+        previous_data = data.data;
+        chart_data = data.chart_data;
+        update(data.data);
+    });
+}
+
+fetch("/req", {method: "POST"}).then(response => response.json()).then(data => {
+    previous_data = data.data;
+    chart_data = data.chart_data;
+    update(data.data);
+});
+
+let graph_labels = ["Fossile", "Wind", "Nuclear", "Solar"];
+function update(data){
+    let labels = [];
+    let x = 0;
+     for(let j = 0; j < chart_data[0][0].length; j++){
+            labels.push(x);
+            x++;
+        }
+    for(let i = 0; i < chart_data[0].length; i++){
+
+        myChart.data.datasets[i].data = chart_data[0][i];
+        myChart.data.datasets[i].label = graph_labels[i];
+    }
+    myChart.data.labels = labels;
+
+    myChart.update();
+    grid_size = [data.width, data.height];
+
+    labels = [];
+    x = 0;
+     for(let j = 0; j < chart_data[1].length; j++){
+            labels.push(x);
+
+            x++;
+        }
+     myChart2.data.datasets[0].data = chart_data[1];
+     console.log(chart_data[1])
+    myChart2.data.labels = labels;
+
+    myChart2.update();
+
+    canvas.width = data.width*cell_size;
+    canvas.height = data.height*cell_size;
+    canvas.style.height = canvas.height+"px";
+    for(let j = 0; j < data.height; j++){
+        for(let i = 0; i < data.width; i++){
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = "#444";
+            ctx.strokeRect(i*cell_size, j*cell_size, cell_size, cell_size);
+            if(selected[0] == i && selected[1] == j){
+                ctx.strokeStyle = "lime";
+                ctx.lineWidth = 5;
+                ctx.strokeRect(i*cell_size, j*cell_size, cell_size, cell_size);
+            }
+            if(data.grid[j*data.width+i] == null && to_add.indexOf(i+""+j) == -1
+                && to_delete.indexOf(i+""+j) == -1){
+                continue;
+            }
+            else if(data.grid[j*data.width+i] == 18){
+                ctx.fillStyle = "blue";
+            }
+            else{
+                ctx.fillStyle = "red";
+            }
+            if(to_add.indexOf(i+""+j) > -1){
+                ctx.fillStyle = "rgb(255, 134, 134)";
+            }
+            if(to_delete.indexOf(i+""+j) > -1){
+                ctx.fillStyle = "rgb(176, 176, 176)";
+            }
+
+            ctx.beginPath();
+            ctx.arc(i*cell_size+cell_size/2, j*cell_size+cell_size/2, 20, 0, 2*Math.PI);
+            ctx.fill();
+        }
+    }
+}
+
+canvas.addEventListener("mousedown", function(e){
+    let rect = e.target.getBoundingClientRect();
+    let x = e.clientX-rect.left;
+    let y = e.clientY-rect.top;
+    if(e.buttons == 1){
+        selected = [Math.floor(x/cell_size), Math.floor(y/cell_size)];
+        update_form();
+        update(previous_data);
+    }
+});
+
+function update_form(){
+    document.getElementById("is_cons").disabled = false;
+    document.getElementById("producer_table").disabled = false;
+    document.getElementById("weights").disabled = false;
+    document.getElementById("treshold").disabled = false;
+    document.getElementById("fossileprice").disabled = false;
+    document.getElementById("table_wind").disabled = false;
+    document.getElementById("solar_price").disabled = false;
+    document.getElementById("nuclear_price").disabled = false;
+    document.getElementById("jobs").disabled = false;
+    document.getElementById("Sjobs").disabled = false;
+    document.getElementById("form").style.display = "inline-block";
+    let selected_grid = previous_data.grid[selected[1]*previous_data.width+selected[0]];
+    if(selected_grid == 18){
+        document.getElementById("form").style.display = "none";
+        return;
+    }
+    if(selected_grid == null) return;
+    document.getElementById("is_cons").checked = selected_grid.is_cons == "True";
+    document.getElementById("producer_table").value = selected_grid.producer_table;
+    document.getElementById("weights").value = selected_grid.weights;
+    document.getElementById("treshold").value = selected_grid.treshold;
+    document.getElementById("fossileprice").value = selected_grid.fossileprice;
+    document.getElementById("table_wind").value = selected_grid.table_wind;
+    document.getElementById("solar_price").value = selected_grid.solar_price;
+    document.getElementById("nuclear_price").value = selected_grid.nuclear_price;
+    document.getElementById("jobs").value = selected_grid.jobs;
+    document.getElementById("Sjobs").value = selected_grid.sjobs;
+    document.getElementById("is_cons").disabled = true;
+    document.getElementById("producer_table").disabled = true;
+    document.getElementById("weights").disabled = true;
+    document.getElementById("treshold").disabled = true;
+    document.getElementById("fossileprice").disabled = true;
+    document.getElementById("table_wind").disabled = true;
+    document.getElementById("solar_price").disabled = true;
+    document.getElementById("nuclear_price").disabled = true;
+    document.getElementById("jobs").disabled = true;
+    document.getElementById("Sjobs").disabled = true;
+}
+
+</script>
+</body>
+</html>
